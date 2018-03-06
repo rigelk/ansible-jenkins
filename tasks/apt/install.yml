@@ -8,7 +8,7 @@
   user:
     name: "{{ jenkins_config_owner }}"
     group: "{{ jenkins_config_group }}"
-    home: "{{ jenkins_home }}"
+{{ jenkins_source_dir_configs }}/
     shell: "/bin/false"
     state: present
 
@@ -65,7 +65,7 @@
 - name: Set JENKINS_HOME
   lineinfile:
     dest: /etc/default/jenkins
-    line: "JENKINS_HOME={{ jenkins_home }}"
+{{ jenkins_source_dir_configs }}/
     regexp: '^JENKINS_HOME='
 
 - name: Set Jenkins port

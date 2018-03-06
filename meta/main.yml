@@ -1,10 +1,10 @@
 ---
 galaxy_info:
-  author: Emmet O'Grady
-  description: Installs and completely configures Jenkins using Ansible
+  author: Pierre-Antoine Rault
+  description: Installs and completely configures Jenkins using Ansible (based on original work from emmetog, kudos to him!)
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
-  issue_tracker_url: https://github.com/emmetog/ansible-jenkins/issues
+  #issue_tracker_url: https://github.com/emmetog/ansible-jenkins/issues
 
   # Some suggested licenses:
   # - BSD (default)
@@ -13,7 +13,7 @@ galaxy_info:
   # - GPLv3
   # - Apache
   # - CC-BY
-  license: MIT
+  license: AGPLv3
 
   min_ansible_version: 2.1
   #

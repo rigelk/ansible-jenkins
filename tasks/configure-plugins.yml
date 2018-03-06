@@ -14,8 +14,9 @@
     headers:
       Content-Type: "text/xml"
       Jenkins-Crumb: "{{ jenkins_token.content.split(':')[1] | default('noCrumb') }}"
-    body: "<jenkins><install plugin=\"{{ item }}@latest\" /></jenkins>"
+    body: "<jenkins><install plugin=\"{{ item }}@current\" /></jenkins>"
     status_code: 200,302
+    follow_redirects: yes
   with_items: "{{ jenkins_plugins }}"
   when: jenkins_token.status == 200
 
@@ -25,8 +26,9 @@
     method: POST
     headers:
       Content-Type: "text/xml"
-    body: "<jenkins><install plugin=\"{{ item }}@latest\" /></jenkins>"
+    body: "<jenkins><install plugin=\"{{ item }}@current\" /></jenkins>"
     status_code: 200,302
+    follow_redirects: yes
   with_items: "{{ jenkins_plugins }}"
   when: jenkins_token.status == 404
 
@@ -34,7 +36,7 @@
 - name: Custom plugins are installed
   copy:
     src: "{{ item }}"
-    dest: "{{ jenkins_home }}/plugins/"
+    dest: "{{ jenkins_source_dir_configs }}/plugins/"
     owner: "{{ jenkins_config_owner }}"
     group: "{{ jenkins_config_group }}"
     mode: 0644
@@ -42,5 +44,5 @@
   when: jenkins_custom_plugins is defined
 
 - wait_for:
-    path: "{{ jenkins_home }}/plugins/{{ item }}.jpi"
+    path: "{{ jenkins_source_dir_configs }}/plugins/{{ item }}.jpi"
   with_items: "{{ jenkins_plugins }}"

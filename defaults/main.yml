@@ -1,10 +1,7 @@
 ---
 
-jenkins_version: "2.73.1" # The exact version of jenkins to deploy
-
 jenkins_url: "http://127.0.0.1" # The url that Jenkins will be accessible on
 jenkins_port: "8080" # The port that Jenkins will listen on
-jenkins_home: /data/jenkins # The directory on the server where the Jenkins configs will live
 jenkins_admin: "admin@example.com" # The admininstrator email address for the Jenkins server
 
 # If you need to override any java options then do that here.
@@ -15,7 +12,7 @@ jenkins_config_owner: "ubuntu"
 jenkins_config_group: "ubuntu"
 
 # The locations of the configuration files for jenkins
-jenkins_source_dir_configs: "{{ playbook_dir }}/jenkins-configs"
+jenkins_source_dir_configs: "{{ playbook_dir }}/jenkins-config"
 jenkins_source_dir_jobs: "{{ jenkins_source_dir_configs }}/jobs"
 
 # config.xml template source
@@ -52,15 +49,36 @@ jenkins_custom_plugins: []
 
 # The docker hub image name
 jenkins_docker_image: "jenkins/jenkins"
+jenkins_docker_image_version: "slim" # or latest, or a specific version, have a look at the tags
 
 # Configs specific to the "docker" method of running jenkins
 # The name of the jenkins container
 jenkins_docker_container_name: jenkins
 
+# Configs the network mode of docker. By default bridge
+jenkins_docker_network_mode: bridge # can be 'host' too, for instance
+
+# List of volumes
+# this will automatically create a 'jenkins_home' volume on docker host, that
+# will survive container stop/restart/deletion.
+# Avoid using a bind mount from a folder on host into `/var/jenkins_home`, as
+# this might result in file permission issue. If you _really_ need to bind mount
+# jenkins_home, ensure that directory on host is accessible by the jenkins user
+# in container (jenkins user - uid 1000) or use `-u some_other_user` parameter
+# with `docker run`.
+jenkins_docker_volumes:
+  - "jenkins_home:/var/jenkins_home"
+
 # Default, if true, the port will be exposed on the host (using "port")
 # If set to false, the port will only be exposed to other containers (using "expose")
 jenkins_docker_expose_port: true
 
+#############################################
+# !Docker vars (anything not docker)
+#############################################
+
+jenkins_version: "2.73.1" # The exact version of jenkins to deploy
+jenkins_home: /data/jenkins # The directory on the server where the Jenkins configs will live
 
 #############################################
 # Apt vars: apply to deploying via apt only #
@@ -73,4 +91,3 @@ jenkins_apt_packages:
 # Java version to use. Note that JDK 8 is required for Jenkins
 # 2.54 or greater.
 jenkins_java_version: "java-1.8.0-openjdk-amd64"
-

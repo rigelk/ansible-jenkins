@@ -31,7 +31,7 @@
   lineinfile:
     create: "yes"
     dest: "/etc/default/jenkins"
-    line: "JENKINS_HOME={{ jenkins_home }}"
+{{ jenkins_source_dir_configs }}/
     regexp: '^JENKINS_HOME='
     state: "present"
 
